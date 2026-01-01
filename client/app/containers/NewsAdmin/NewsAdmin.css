@@ -1,0 +1,26 @@
+/* News Admin Styles */
+.news-admin .btn-group .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.news-admin table td {
+  vertical-align: middle;
+}
+
+.news-admin .badge {
+  font-size: 0.8rem;
+}
+
+/* Question Form Styles */
+.quiz-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.quiz-form .option-letter {
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+  font-weight: bold;
+  margin-right: 10px;
+}
