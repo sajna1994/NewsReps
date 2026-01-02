@@ -56,18 +56,25 @@ export const fetchNewsDetail = (id) => {
     };
 };
 
-// Create news
 export const createNews = (newsData) => {
     return async (dispatch) => {
         try {
             dispatch({ type: SET_NEWS_SUBMITTING, payload: true });
 
             const token = localStorage.getItem('token');
+
+            // Log for debugging
+            console.log('Creating news with token:', token ? 'Present' : 'Missing');
+            console.log('News data:', newsData);
+
             const response = await axios.post(`${API_URL}/news`, newsData, {
                 headers: {
-                    Authorization: token
+                    Authorization: token,
+                    'Content-Type': 'application/json'
                 }
             });
+
+            console.log('Response:', response.data);
 
             dispatch({
                 type: CREATE_NEWS,
@@ -81,20 +88,25 @@ export const createNews = (newsData) => {
                 autoDismiss: 3
             }));
 
-            // Refresh news list
             dispatch(fetchNews());
-
-            // Reset form
             dispatch({ type: RESET_NEWS_FORM });
 
         } catch (err) {
-            const errorMessage = err.response?.data?.error || 'Failed to create news';
+            // Better error logging
+            console.error('Error creating news:', err);
+            console.error('Error response:', err.response?.data);
+
+            const errorMessage = err.response?.data?.error ||
+                err.message ||
+                'Failed to create news';
+
             dispatch(error({
                 title: 'Error!',
                 message: errorMessage,
                 position: 'tr',
                 autoDismiss: 5
             }));
+
             dispatch({
                 type: SET_NEWS_FORM_ERRORS,
                 payload: { submit: errorMessage }

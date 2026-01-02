@@ -112,7 +112,7 @@ router.get('/leaderboard/:id', async (req, res) => {
 router.post('/create', auth, async (req, res) => {
     try {
         // Check if user is admin
-        if (req.user.role !== 'ROLES.Admin') {
+        if (req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 success: false,
                 error: 'Not authorized'

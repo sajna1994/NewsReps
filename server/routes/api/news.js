@@ -10,7 +10,7 @@ const News = require('../../models/news');
 // @access  Public
 router.get('/', async (req, res) => {
     try {
-        const news = await News.find({ isPublished: true })
+        const news = await News.find({})  // ← Changed from { isPublished: true } to {}
             .populate('author', 'firstName lastName')
             .sort({ publishedDate: -1 });
 
@@ -31,7 +31,6 @@ router.get('/', async (req, res) => {
 router.get('/featured', async (req, res) => {
     try {
         const featuredNews = await News.find({
-            isPublished: true,
             isFeatured: true
         })
             .populate('author', 'firstName lastName')
@@ -136,8 +135,19 @@ router.get('/:id', async (req, res) => {
 // @route   POST api/news
 // @desc    Create news article
 // @access  Private (Admin/Author)
+// @route   POST api/news
+// @desc    Create news article
+// @access  Private (Admin/Author)
+// @route   POST api/news
+// @desc    Create news article
+// @access  Private (Admin/Author)
 router.post('/', auth, async (req, res) => {
     try {
+        console.log('=== CREATE NEWS REQUEST ===');
+        console.log('User ID:', req.user.id);
+        console.log('User role:', req.user.role);
+        console.log('Request body:', JSON.stringify(req.body, null, 2));
+
         const {
             title,
             content,
@@ -147,8 +157,18 @@ router.post('/', auth, async (req, res) => {
             source,
             questions,
             difficulty,
-            tags
+            tags,
+            isPublished,
+            isFeatured
         } = req.body;
+
+        // Log each field
+        console.log('Title:', title);
+        console.log('Content length:', content ? content.length : 0);
+        console.log('Category:', category);
+        console.log('Tags:', tags);
+        console.log('isPublished:', isPublished);
+        console.log('isFeatured:', isFeatured);
 
         if (!title || !content) {
             return res.status(400).json({
@@ -156,21 +176,39 @@ router.post('/', auth, async (req, res) => {
             });
         }
 
-        const news = new News({
-            title,
-            content,
-            summary,
-            category,
-            imageUrl,
-            source,
-            questions,
-            difficulty,
-            tags,
-            author: req.user.id,
-            isPublished: req.user.role === 'ROLES.Admin' // Auto-publish for admin
-        });
+        // Convert tags
+        let tagsArray = [];
+        if (tags) {
+            if (typeof tags === 'string') {
+                tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+            } else if (Array.isArray(tags)) {
+                tagsArray = tags;
+            }
+        }
 
+        // Create news object
+        const newsData = {
+            title: title.trim(),
+            content: content.trim(),
+            summary: summary ? summary.trim() : '',
+            category: category || 'General',
+            imageUrl: imageUrl || '',
+            source: source || '',
+            questions: [],
+            difficulty: difficulty || 'Medium',
+            tags: tagsArray,
+            author: req.user.id,
+            isPublished: isPublished || false,  // Don't auto-publish
+            isFeatured: isFeatured || false
+        };
+
+        console.log('News data to save:', newsData);
+
+        const news = new News(newsData);
         const savedNews = await news.save();
+
+        console.log('=== NEWS SAVED SUCCESSFULLY ===');
+        console.log('News ID:', savedNews._id);
 
         res.status(201).json({
             success: true,
@@ -178,8 +216,22 @@ router.post('/', auth, async (req, res) => {
             news: savedNews
         });
     } catch (error) {
+        console.error('=== ERROR CREATING NEWS ===');
+        console.error('Error name:', error.name);
+        console.error('Error message:', error.message);
+
+        // Check for validation errors
+        if (error.name === 'ValidationError') {
+            console.error('Validation errors:', error.errors);
+            return res.status(400).json({
+                error: 'Validation failed',
+                details: error.errors
+            });
+        }
+
         res.status(400).json({
-            error: 'Your request could not be processed. Please try again.'
+            error: 'Your request could not be processed. Please try again.',
+            details: error.message
         });
     }
 });
@@ -198,7 +250,7 @@ router.put('/:id', auth, async (req, res) => {
         }
 
         // Check if user is author or admin
-        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLES.Admin') {
+        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to update this article.'
             });
@@ -236,7 +288,7 @@ router.delete('/:id', auth, async (req, res) => {
         }
 
         // Check if user is author or admin
-        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLES.Admin') {
+        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to delete this article.'
             });
@@ -317,7 +369,7 @@ router.post('/:newsId/questions', auth, async (req, res) => {
         }
 
         // Check if user is authorized (admin or the author)
-        if (req.user.role !== 'ROLES.Admin' && news.author.toString() !== req.user.id) {
+        if (req.user.role !== 'ROLE ADMIN' && news.author.toString() !== req.user.id) {
             return res.status(401).json({
                 success: false,
                 error: 'Not authorized to add questions to this news article'
@@ -373,7 +425,7 @@ router.delete('/:id/questions/:questionIndex', auth, async (req, res) => {
         }
 
         // Check if user is author or admin
-        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLES.Admin') {
+        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to delete questions from this article.'
             });
@@ -425,7 +477,6 @@ router.get('/today', async (req, res) => {
 
         // Find news published today
         const news = await News.find({
-            isPublished: true,
             publishedDate: {
                 $gte: today,
                 $lt: tomorrow
@@ -466,7 +517,7 @@ router.put('/:id/questions/:questionIndex', auth, async (req, res) => {
         }
 
         // Check if user is author or admin
-        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLES.Admin') {
+        if (news.author.toString() !== req.user.id && req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to update questions in this article.'
             });

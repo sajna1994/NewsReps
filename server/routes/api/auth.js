@@ -188,7 +188,7 @@ router.post('/register/admin', async (req, res) => {
       password,
       firstName,
       lastName,
-      role: 'ROLES.Admin' // Set as admin
+      role: 'ROLE ADMIN' // Set as admin
     });
 
     const salt = await bcrypt.genSalt(10);

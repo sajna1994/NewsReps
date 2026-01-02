@@ -341,7 +341,7 @@ class Navigation extends React.PureComponent {
                             </DropdownItem>
 
                             {/* ===== ADD MANAGE NEWS FOR ADMINS ===== */}
-                            {user.role === 'ROLES.Admin' && (
+                            {user.role === 'ROLE ADMIN' && (
                               <DropdownItem onClick={() => history.push('/admin/news')}>
                                 Manage News
                               </DropdownItem>

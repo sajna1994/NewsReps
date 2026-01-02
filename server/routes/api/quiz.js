@@ -83,7 +83,7 @@ router.post('/', auth, async (req, res) => {
         } = req.body;
 
         // Check if user is admin
-        if (req.user.role !== 'ROLES.Admin') {
+        if (req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to create quizzes.'
             });
@@ -255,7 +255,7 @@ async function createDailyQuiz() {
 router.post('/generate/daily', auth, async (req, res) => {
     try {
         // Check if user is admin
-        if (req.user.role !== 'ROLES.Admin') {
+        if (req.user.role !== 'ROLE ADMIN') {
             return res.status(401).json({
                 error: 'Not authorized to generate quizzes.'
             });
