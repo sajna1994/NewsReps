@@ -17,9 +17,9 @@ const API_URL = process.env.API_URL;
 const config = {
   mode: 'production',
   output: {
-    path: path.join(CURRENT_WORKING_DIR, '/dist'),
-    filename: 'js/[name].[hash].js',
-    publicPath: '/'
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'bundle.js',
+    publicPath: '/'  // ← This is important!
   },
   module: {
     rules: [
@@ -114,10 +114,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(NODE_ENV),
-        API_URL: JSON.stringify(API_URL)
-      }
+      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL || 'https://newsreps.onrender.com/api')
     }),
     new HtmlWebpackPlugin({
       template: path.join(CURRENT_WORKING_DIR, 'public/index.html'),

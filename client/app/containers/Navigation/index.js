@@ -180,7 +180,7 @@ class Navigation extends React.PureComponent {
                 )}
                 <Link to='/'>
                   <img
-                    src="\public\images\yhh.png"
+                    src="\images\yhh.png"
                     alt="Logo"
                     className="logo-image"
                     style={{ height: '95px', width: 'auto' }} // Adjust as needed

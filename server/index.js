@@ -22,8 +22,16 @@ app.use(
     frameguard: true
   })
 );
-app.use(cors());
-
+app.use(cors({
+  origin: [
+    'http://localhost:8080',
+    'https://newsreps-client.onrender.com', // Your client URL
+    'https://newsreps.onrender.com' // Your server URL
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 setupDB();
 require('./config/passport')(app);
 app.use(routes);
