@@ -26,7 +26,7 @@ app.use(cors({
   origin: [
     'http://localhost:8080',
     'https://newsreps-client.onrender.com', // Your client URL
-    'https://newsreps.onrender.com' // Your server URL
+    'https://newsreps.onrender.com/api' // Your server URL
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
