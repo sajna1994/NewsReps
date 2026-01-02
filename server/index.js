@@ -25,8 +25,8 @@ app.use(
 app.use(cors({
   origin: [
     'http://localhost:8080',
-    'https://newsreps-client.onrender.com', // Your client URL
-    'https://newsreps.onrender.com/api' // Your server URL
+    'https://newsreps-client.onrender.com',
+    'https://newsreps.onrender.com' // Remove /api
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -34,7 +34,7 @@ app.use(cors({
 }));
 setupDB();
 require('./config/passport')(app);
-app.use(routes);
+// app.use(routes);
 
 const server = app.listen(port, () => {
   console.log(

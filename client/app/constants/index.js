@@ -1,4 +1,4 @@
-export const API_URL = process.env.REACT_APP_API_URL || 'https://newsreps.onrender.com/api';
+export const API_URL = process.env.REACT_APP_API_URL || 'https://newsreps.onrender.com';
 export const SOCKET_URL =
   window.location.host.indexOf('localhost') >= 0
     ? 'http://127.0.0.1:3000'
