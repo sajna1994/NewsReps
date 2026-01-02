@@ -7,11 +7,11 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history'; // Change from createBrowserHistory
 
 import createReducer from './reducers';
 
-export const history = createBrowserHistory({
+export const history = createHashHistory({
   basename: '/',
   hashType: 'noslash'
 });
@@ -23,8 +23,8 @@ const enhancers = [applyMiddleware(...middlewares)];
 // If Redux DevTools Extension is installed use it, otherwise use Redux compose
 const composeEnhancers =
   process.env.NODE_ENV !== 'production' &&
-  typeof window === 'object' &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    typeof window === 'object' &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 

@@ -1,3 +1,4 @@
+// C:\Users\91974\Desktop\NewsReps\mern-ecommerce\client\app\containers\Application\constants.js
 /*
  *
  * Application constants

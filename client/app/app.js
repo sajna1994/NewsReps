@@ -43,13 +43,13 @@ if (token) {
 
 const app = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <HashRouter basename="/">  {/* Use HashRouter instead */}
       <SocketProvider>
         <ScrollToTop>
           <Application />
         </ScrollToTop>
       </SocketProvider>
-    </ConnectedRouter>
+    </HashRouter>
   </Provider>
 );
 

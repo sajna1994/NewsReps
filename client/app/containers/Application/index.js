@@ -1,4 +1,4 @@
-// app/containers/Application/index.js
+// C:\Users\91974\Desktop\NewsReps\mern-ecommerce\client\app\containers\Application\index.js
 import React from 'react';
 
 import { connect } from 'react-redux';
