@@ -1,3 +1,4 @@
+// \NewsReps\mern-ecommerce\server\constants\index.js
 exports.ROLES = {
   Admin: 'ROLE ADMIN',
   Member: 'ROLE MEMBER',

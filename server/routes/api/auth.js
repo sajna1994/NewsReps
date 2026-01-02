@@ -1,3 +1,4 @@
+//\NewsReps\mern-ecommerce\server\routes\api\auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');

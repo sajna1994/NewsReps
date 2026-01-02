@@ -1,3 +1,4 @@
+// \NewsReps\mern-ecommerce\server\index.js
 require('dotenv').config();
 const express = require('express');
 const chalk = require('chalk');
@@ -14,7 +15,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/api', routes); // This makes all routes start with /api
+// app.use('/api', routes); // This makes all routes start with /api
 
 app.use(
   helmet({
@@ -34,7 +35,7 @@ app.use(cors({
 }));
 setupDB();
 require('./config/passport')(app);
-// app.use(routes);
+app.use(routes);
 
 const server = app.listen(port, () => {
   console.log(

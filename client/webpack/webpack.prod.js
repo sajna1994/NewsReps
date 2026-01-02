@@ -114,7 +114,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL || 'https://newsreps.onrender.com')
+      'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL || 'https://newsreps.onrender.com/api')
     }),
     new HtmlWebpackPlugin({
       template: path.join(CURRENT_WORKING_DIR, 'public/index.html'),
